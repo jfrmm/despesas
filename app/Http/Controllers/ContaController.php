@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Conta;
+
 use Illuminate\Http\Request;
 
 class ContaController extends Controller
@@ -61,7 +62,11 @@ class ContaController extends Controller
      */
     public function show(Conta $conta)
     {
-        //
+        $data = [
+            'conta' => $conta,
+        ];
+
+        return view('contas.show', $data);
     }
 
     /**
@@ -93,7 +98,42 @@ class ContaController extends Controller
             'iban' => 'required|size:25|unique:contas,iban,' . $conta->id,
         ]);
 
-        return redirect('/contas');
+        $r = $conta->update($request->all());
+
+        if($r == 0) {
+            $message = [
+                'type' => 'warning',
+                'text' => 'Falha na edição de ' . $conta->nome . '.',
+            ];
+
+        } else {
+            $message = [                
+                'type' => 'success',
+                'text' => 'Sucesso na edição de ' . $conta->nome  . '.',
+            ];
+
+        }
+
+        $data = [
+            'conta' => $conta,
+            'message' => $message,
+        ];
+
+        return view('contas.show', $data);
+    }
+
+    /**
+     * Show the form for deleting a resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(Conta $conta)
+    {
+        $data = [
+            'conta' => $conta,
+        ];
+        
+        return view('contas.delete', $data);
     }
 
     /**

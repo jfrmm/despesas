@@ -13,6 +13,9 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/despesas.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+    <!-- toastr notifications -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -48,6 +51,7 @@
                             <li><a href="{{ route('register') }}">Register</a></li>
                         @else
                             <li><a href="/contas">Contas</a></li>
+                            <li><a href="/movimentos">Movimentos</a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -74,11 +78,24 @@
         </nav>
 
         <main>
+            @if (session('status'))
+            <div class="alert alert-{{session('status')['alert']}}">
+                {{ session('status')['text'] }}
+            </div>
+            @endif
+
             @yield('content')
+
+            <div class="modals"></div>
+
         </main>
     </div>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/ajax-crud.js') }}"></script>
+    <script src="{{ asset('js/despesas.js') }}"></script>
+    <!-- toastr notifications -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 </body>
 </html>

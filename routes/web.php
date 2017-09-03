@@ -19,4 +19,10 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::resource('contas','ContaController');
+Route::get('contas/{conta}/delete', 'ContaController@delete');
+Route::resource('contas', 'ContaController', ['names' => [
+    'delete' => 'conta.delete'
+]]);
+
+Route::get('movimentos/{movimento}/delete', 'MovimentoController@delete');
+Route::resource('movimentos', 'MovimentoController');
