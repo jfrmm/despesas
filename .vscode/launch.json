@@ -8,6 +8,14 @@
             "port": 9000
         },
         {
+            "name": "Listen for XDebug (Homestead)",
+            "type": "php",
+            "request": "launch",
+            "port": 9000,
+            "serverSourceRoot": "/home/vagrant/code",
+            "localSourceRoot": "${workspaceRoot}"
+        },
+        {
             "name": "Launch currently open script",
             "type": "php",
             "request": "launch",
