@@ -21,7 +21,7 @@ class AccountController extends Controller
             'accounts' => Account::all(),
         ];
 
-        return view('account::accounts.index', $data);
+        return response()->json($data);
     }
 
     /**

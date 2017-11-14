@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+// API v1
+Route::group([
+    'prefix' => 'v1',
+], function() {
+    Route::get('/', function() {
+        return response()->json(['message' => 'Despesas API', 'status' => 'Connected']);
+    });
+});
