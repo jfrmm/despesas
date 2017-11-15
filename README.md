@@ -12,7 +12,7 @@ databases:
 ```
 
 ## .env
-The .env.example is already set Homestead wise
+The .env.example is already set Homestead wise. Just don't forget to make the necessary adjustments to your environment (APP_URL, etc)
 
 ## Packages
 Start with a package dependency check and installation
@@ -20,7 +20,7 @@ Start with a package dependency check and installation
 composer install
 ```
 
-### tymon/jwt
+### tymondesigns/jwt-auth
 To generate a local JWT key, run
 ```
 php artisan jwt:secret
