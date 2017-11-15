@@ -12,17 +12,24 @@ databases:
 ```
 
 ## .env
-Set your `.env` as the following, in the appropriate lines
-```
-APP_NAME=Despesas
-...
-DB_DATABASE=despesas
-```
+The .env.example is already set Homestead wise
 
 ## Packages
 Start with a package dependency check and installation
 ```
 composer install
+```
+
+### tymon/jwt
+To generate a local JWT key, run
+```
+php artisan jwt:secret
+```
+
+## Migrate and seed
+Build and populate the database with some test data, just run
+```
+php artisan migrate --seed
 ```
 
 ## Troubleshooting
