@@ -5,18 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Listen for XDebug",
-            "type": "php",
-            "request": "launch",
-            "port": 9000
-        },
-        {
             "name": "XDebug (Homestead)",
             "type": "php",
             "request": "launch",
             "port": 9000,
             "serverSourceRoot": "/home/vagrant/code",
-            "localSourceRoot": "${workspaceRoot}"
+            "localSourceRoot": "c:/code/php"
         }
     ]
 }

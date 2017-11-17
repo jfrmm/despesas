@@ -1,0 +1,4 @@
+{
+    "phpcs.standard": "PSR2",
+    "files.eol": "\n"
+}
