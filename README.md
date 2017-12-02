@@ -46,6 +46,7 @@ Then install this two plugins in your box
 ```
 vagrant plugin install vagrant-vbguest
 vagrant plugin install vagrant-winnfsd
+vagrant plugin install vagrant-bindfs
 ```
 
 Finnaly, in `c:\path\to\Homestead\scripts\homestead.rb` add this to the end of the `def Homestead.configure` block:
@@ -65,5 +66,5 @@ end
 If your box was already up, you should first destroy it (beware of your DB data!)
 ```
 vagrant destroy
-vagrant up
+vagrant up --provision
 ```
