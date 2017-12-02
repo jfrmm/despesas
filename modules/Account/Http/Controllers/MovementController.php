@@ -1,143 +1,166 @@
 <?php
-
 namespace Modules\Account\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Nwidart\Modules\Facades\Module;
+use App\Helpers\Api\Http\C3po;
 
-use Modules\Account\Entities\Movement;
-use Modules\Account\Entities\Account;
+use Modules\Account\Repositories\Movement\MovementRepository as Movement;
+use Modules\Account\Http\Requests\Movement\CreateRequest;
+use Modules\Account\Http\Requests\Movement\UpdateRequest;
+use Modules\Account\Http\Requests\Movement\DeleteRequest;
 
 class MovementController extends Controller
 {
     /**
-     * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @var object
      */
-    public function index()
-    {
-        $data = [
-            'movements' => Movement::orderBy('date', 'DESC')->orderBy('id', 'DESC')->get(),
-        ];
+    private $entity;
 
-        return view('account::movements.index', $data);
+    /**
+     * The name of the entity we're refering to in the Controller
+     *
+     * @var string
+     */
+    private $entityName;
+
+    /**
+     * The module in which the Controller is
+     *
+     * @var object
+     */
+    private $module;
+
+    /**
+     * Constructor
+     *
+     * @param Movement $movement
+     */
+    public function __construct(Movement $movement)
+    {
+        $this->entity = $movement;
+        $this->entityName = 'movement';
+        $this->module = Module::find('Account');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @return Response
      */
-    public function create()
+    public function index(Request $request)
     {
-        $data = [
-            'contas' => Conta::orderBy('nome')->get(),
-        ];
+        $result = $this->entity->getAll($request);
 
-        return view('movimentos.create', $data);
+        $statusCode = 200;
+        $message = C3po::prepareMessage('crud', $this->entityName, 'indexed', $this->module->getName());
+        $data = C3po::prepareData($result, $this->entityName);
+
+        return C3po::respond($statusCode, $message, $data);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  CreateRequest $request
+     * @return Response
      */
-    public function store(Request $request)
+    public function store(CreateRequest $request)
     {
-        $this->validate($request, [
-            'conta_id'      => 'required|integer',
-            'data'          => 'required|date',
-            'valor'         => 'required|numeric',
-            'descricao'     => 'string|max:191',
-        ]);
+        $result = $this->entity->createOrUpdate($request);
 
-        $r = Movimento::create($request->all());
+        $statusCode = 201;
+        $message = C3po::prepareMessage('crud', $this->entityName, 'created', $this->module->getName());
+        $data = C3po::prepareData($result, $this->entityName);
 
-        if($r)
-            return response()->json(['result' => 'success', 'message' => 'Movimento ' . $r->id . ' criado.']);
-        else
-            return response()->json(['result' => 'error', 'message' => 'Erro ao criar movimento.']);
+        // Send response
+        return C3po::respond($statusCode, $message, $data);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Movimento  $movimento
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @param  int $id
+     * @return Response
      */
-    public function show(Movimento $movimento)
+    public function show(Request $request, $id)
     {
+        $result = $this->entity->getOne($request, $id);
 
-    }
+        if (!$result) {
+            // Not found
+            $statusCode = 404;
+            $message = C3po::prepareMessage('crud', $this->entityName, 'error.not_found', $this->module->getName());
+            $data = null;
+        } else {
+            $statusCode = 200;
+            $message = C3po::prepareMessage('crud', $this->entityName, 'read', $this->module->getName());
+            $data = C3po::prepareData($result, $this->entityName);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Movimento  $movimento
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Movimento $movimento)
-    {
-        $data = [
-            'movimento' => $movimento,
-            'contas'    => Conta::orderBy('nome')->get(),
-        ];
-
-        return view('movimentos.edit', $data);
+        // Send response
+        return C3po::respond($statusCode, $message, $data);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Movimento  $movimento
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @param  int $id
+     * @return Response
      */
-    public function update(Request $request, Movimento $movimento)
+    public function update(UpdateRequest $request, $id)
     {
-        $this->validate($request, [
-            'conta_id'      => 'required|integer',
-            'data'          => 'required|date',
-            'valor'         => 'required|numeric',
-            'descricao'     => 'string|max:191',
-        ]);
+        $result = $this->entity->getOne($request, $id);
 
-        $movimento->update($request->all());
+        if (!$result) {
+            // Not found
+            $statusCode = 404;
+            $message = C3po::prepareMessage('crud', $this->entityName, 'error.not_found', $this->module->getName());
+            $data = null;
+        } else {
+            $result = $this->entity->createOrUpdate($request, $result);
 
-        if($r)
-            return response()->json(['result' => 'success', 'message' => 'Movimento ' . $r->id . ' editado.']);
-        else
-            return response()->json(['result' => 'error', 'message' => 'Erro ao editar movimento.']);
-    }
+            $statusCode = 200;
+            $message = C3po::prepareMessage('crud', $this->entityName, 'updated', $this->module->getName());
+            $data = C3po::prepareData($result, $this->entityName);
+        }
 
-    /**
-     * Show the form for deleting a resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function delete(Movimento $movimento)
-    {
-        $data = [
-            'movimento' => $movimento,
-        ];
-
-        return view('movimentos.delete', $data);
+        // Send response
+        return C3po::respond($statusCode, $message, $data);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Movimento  $movimento
-     * @return \Illuminate\Http\Response
+     * @param  DeleteRequest $request
+     * @param  int $id
+     * @return Response
      */
-    public function destroy(Movimento $movimento)
+    public function destroy(DeleteRequest $request, $id)
     {
-        if($movimento->delete())
-            return response()->json(['result' => 'success', 'message' => 'Movimento ' . $movimento->id . ' eliminado.']);
-        else
-            return response()->json(['result' => 'error', 'message' => 'Erro ao eliminar movimento ' . $movimento->id . '.']);
+        $withTrashed = false; // for now we're not factoring in the trashed items
+        $hardDelete = $withTrashed ? true : false;
+        $result = $this->entity->getOne($request, $id);
+
+        if (!$result) {
+            // Not found
+            $statusCode = 404;
+            $message = C3po::prepareMessage('crud', $this->entityName, 'error.not_found', $this->module->getName());
+        } else {
+            $deleted = $result;
+            $this->entity->deleteOne($request, $id);
+
+            $statusCode = 200;
+            $message = C3po::prepareMessage('crud', $this->entityName, 'deleted', $this->module->getName());
+        }
+
+        // Send response
+        return C3po::respond($statusCode, $message);
     }
 }

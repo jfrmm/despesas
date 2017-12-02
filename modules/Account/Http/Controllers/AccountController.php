@@ -7,10 +7,10 @@ use Illuminate\Routing\Controller;
 use Nwidart\Modules\Facades\Module;
 use App\Helpers\Api\Http\C3po;
 
-use Modules\Account\Repositories\AccountRepository as Account;
-use Modules\Account\Http\Requests\CreateRequest;
-use Modules\Account\Http\Requests\UpdateRequest;
-use Modules\Account\Http\Requests\DeleteRequest;
+use Modules\Account\Repositories\Account\AccountRepository as Account;
+use Modules\Account\Http\Requests\Account\CreateRequest;
+use Modules\Account\Http\Requests\Account\UpdateRequest;
+use Modules\Account\Http\Requests\Account\DeleteRequest;
 
 class AccountController extends Controller
 {
@@ -21,18 +21,18 @@ class AccountController extends Controller
     private $entity;
 
     /**
-     * The module in which the Controller is
-     *
-     * @var object
-     */
-    private $module;
-
-    /**
      * The name of the entity we're refering to in the Controller
      *
      * @var string
      */
     private $entityName;
+
+    /**
+     * The module in which the Controller is
+     *
+     * @var object
+     */
+    private $module;
 
     /**
      * Constructor
@@ -57,8 +57,8 @@ class AccountController extends Controller
         $result = $this->entity->getAll($request);
 
         $statusCode = 200;
-        $message    = C3po::prepareMessage('crud', $this->entityName, 'indexed', $this->module->getName());
-        $data       = C3po::prepareData($result, $this->entityName);
+        $message = C3po::prepareMessage('crud', $this->entityName, 'indexed', $this->module->getName());
+        $data = C3po::prepareData($result, $this->entityName);
 
         return C3po::respond($statusCode, $message, $data);
     }
@@ -74,8 +74,8 @@ class AccountController extends Controller
         $result = $this->entity->createOrUpdate($request);
 
         $statusCode = 201;
-        $message    = C3po::prepareMessage('crud', $this->entityName, 'created', $this->module->getName());
-        $data       = C3po::prepareData($result, $this->entityName);
+        $message = C3po::prepareMessage('crud', $this->entityName, 'created', $this->module->getName());
+        $data = C3po::prepareData($result, $this->entityName);
 
         // Send response
         return C3po::respond($statusCode, $message, $data);
@@ -95,12 +95,12 @@ class AccountController extends Controller
         if (!$result) {
             // Not found
             $statusCode = 404;
-            $message    = C3po::prepareMessage('crud', $this->entityName, 'error.not_found', $this->module->getName());
-            $data       = null;
+            $message = C3po::prepareMessage('crud', $this->entityName, 'error.not_found', $this->module->getName());
+            $data = null;
         } else {
             $statusCode = 200;
-            $message    = C3po::prepareMessage('crud', $this->entityName, 'read', $this->module->getName());
-            $data       = C3po::prepareData($result, $this->entityName);
+            $message = C3po::prepareMessage('crud', $this->entityName, 'read', $this->module->getName());
+            $data = C3po::prepareData($result, $this->entityName);
         }
 
         // Send response
@@ -121,14 +121,14 @@ class AccountController extends Controller
         if (!$result) {
             // Not found
             $statusCode = 404;
-            $message    = C3po::prepareMessage('crud', $this->entityName, 'error.not_found', $this->module->getName());
-            $data       = null;
+            $message = C3po::prepareMessage('crud', $this->entityName, 'error.not_found', $this->module->getName());
+            $data = null;
         } else {
             $result = $this->entity->createOrUpdate($request, $result);
 
             $statusCode = 200;
-            $message    = C3po::prepareMessage('crud', $this->entityName, 'updated', $this->module->getName());
-            $data       = C3po::prepareData($result, $this->entityName);
+            $message = C3po::prepareMessage('crud', $this->entityName, 'updated', $this->module->getName());
+            $data = C3po::prepareData($result, $this->entityName);
         }
 
         // Send response
@@ -145,21 +145,22 @@ class AccountController extends Controller
     public function destroy(DeleteRequest $request, $id)
     {
         $withTrashed = false; // for now we're not factoring in the trashed items
-        $hardDelete  = $withTrashed ? true : false;
-        $result      = $this->entity->getOne($request, $id);
+        $hardDelete = $withTrashed ? true : false;
+        $result = $this->entity->getOne($request, $id);
 
         if (!$result) {
             // Not found
             $statusCode = 404;
-            $message    = C3po::prepareMessage('crud', $this->entityName, 'error.not_found', $this->module->getName());
+            $message = C3po::prepareMessage('crud', $this->entityName, 'error.not_found', $this->module->getName());
         } else {
             $deleted = $result;
             $this->entity->deleteOne($request, $id);
 
             $statusCode = 200;
-            $message    = C3po::prepareMessage('crud', $this->entityName, 'deleted', $this->module->getName());
+            $message = C3po::prepareMessage('crud', $this->entityName, 'deleted', $this->module->getName());
         }
 
         // Send response
-        return C3po::respond($statusCode, $message);    }
+        return C3po::respond($statusCode, $message);
+    }
 }

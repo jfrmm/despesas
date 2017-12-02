@@ -15,6 +15,7 @@ class Movement extends Model
         'date',
         'amount',
         'description',
+        'account_id',
     ];
 
     public static function boot()
@@ -27,15 +28,6 @@ class Movement extends Model
                 Withdrawal::create(['movement_id' => $model->id]);
             } else {
                 Deposit::create(['movement_id' => $model->id]);
-            }
-        });
-
-        static::deleting(function ($model) {
-            // delete associated withdrawal or deposit
-            if ($model->amount < 0) {
-                Withdrawal::destroy($model->id);
-            } else {
-                Deposit::destroy($model->id);
             }
         });
     }

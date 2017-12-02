@@ -1,12 +1,12 @@
 <?php
-namespace Modules\Account\Repositories;
+namespace Modules\Account\Repositories\Movement;
 
 use Illuminate\Http\Request;
 use App\Helpers\BaseRepository\Eloquent\BaseRepository;
 
-use Modules\Account\Entities\Account;
+use Modules\Account\Entities\Movement;
 
-class AccountRepository extends BaseRepository
+class MovementRepository extends BaseRepository
 {
     /**
      * Specify Model class name
@@ -15,7 +15,7 @@ class AccountRepository extends BaseRepository
      */
     public function model()
     {
-        return Account::class;
+        return Movement::class;
     }
 
     /**
@@ -23,7 +23,7 @@ class AccountRepository extends BaseRepository
      *
      * @param Request $request
      *
-     * @return Account
+     * @return Movement
      */
     public function getAll(Request $request)
     {
@@ -34,27 +34,27 @@ class AccountRepository extends BaseRepository
      * Create or update an item
      *
      * @param Request $request
-     * @param Account $account
+     * @param Movement $movement
      *
-     * @return Account
+     * @return Movement
      */
-    public function createOrUpdate(Request $request, Account $account = null)
+    public function createOrUpdate(Request $request, Movement $movement = null)
     {
-        if (is_null($account)) {
+        if (is_null($movement)) {
             /**
              * Let's try and create
              */
 
-            $account = $this->create($request);
+            $movement = $this->create($request);
         } else {
             /**
              * Let's try and update
              */
 
-            $account = $this->update($request, $account->id);
+            $movement = $this->update($request, $movement->id);
         }
 
-        return $account;
+        return $movement;
     }
 
     /**
@@ -63,7 +63,7 @@ class AccountRepository extends BaseRepository
      * @param Request $request
      * @param uuid $id
      *
-     * @return Account
+     * @return Movement
      */
     public function getOne(Request $request, $id)
     {
@@ -76,7 +76,7 @@ class AccountRepository extends BaseRepository
      * @param Request $request
      * @param uuid $id
      *
-     * @return Account
+     * @return Movement
      */
     public function getOneWithTrashed(Request $request, $id)
     {

@@ -8,6 +8,10 @@ use Modules\Account\Entities\DepositType;
 
 class Deposit extends Model
 {
+    protected $fillable = [
+        'movement_id',
+    ];
+
     public function type()
     {
         return $this->hasOne(DepositType::class);

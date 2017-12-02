@@ -26,4 +26,29 @@ return [
             ],
         ],
     ],
+    'movement' => [
+        'indexed' => 'Accounts indexed.',
+        'created' => 'Movement created.',
+        'read' => 'Movement read.',
+        'updated' => 'Movement updated.',
+        'deleted' => 'Movement deleted.',
+        'error' => [
+            'creating' => 'Sorry, an error occurred while trying to create the movement.',
+            'reading' => 'Sorry, an error occurred while trying to read the movement.',
+            'updating' => 'Sorry, an error occurred while trying to update the movement.',
+            'deleting' => 'Sorry, an error occurred while trying to delete the movement.',
+            'not_found' => 'Sorry, the movement was not found.',
+        ],
+        'relationship' => [
+            'indexed' => 'Movements\'s relationship items indexed.',
+            'created' => 'Attached to movement.',
+            'deleted' => 'Detached from movement.',
+            'not_found' => 'Relationship not found.',
+            'error' => [
+                'creating' => 'Sorry, an error ocurred while trying to attach to the movement.',
+                'deleting' => 'Sorry, an error ocurred while trying to detach from the movement.',
+                'not_found' => 'Sorry, the movement\'s relationship items were not found.',
+            ],
+        ],
+    ],
 ];

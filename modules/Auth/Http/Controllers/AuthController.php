@@ -2,23 +2,68 @@
 namespace Modules\Auth\Http\Controllers;
 
 use Illuminate\Http\Request;
-// use Illuminate\Http\Response;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use JWTAuth;
+use Nwidart\Modules\Facades\Module;
+use App\Helpers\Api\Http\C3po;
+
+use Modules\User\Repositories\UserRepository as User;
+use Modules\Auth\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
-    protected $user;
+    /**
+     *
+     * @var object
+     */
+    private $entity;
+
+    /**
+     * The name of the entity we're refering to in the Controller
+     *
+     * @var string
+     */
+    private $entityName;
+
+    /**
+     * The module in which the Controller is
+     *
+     * @var object
+     */
+    private $module;
 
     /**
      * Create a new AuthController instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(User $user)
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['register', 'login']]);
+        $this->entity = $user;
+        $this->entityName = 'user';
+        $this->module = Module::find('Auth');
+    }
+
+    /**
+     * Register a new user
+     *
+     * @param RegisterRequest $request
+     *
+     * @return Response
+     */
+    public function register(RegisterRequest $request)
+    {
+        $result = $this->entity->createOrUpdate($request);
+
+        $statusCode = 201;
+        $message = C3po::prepareMessage('messages', false, 'user_registered', $this->module->getName());
+        $data = C3po::prepareData($result, $this->entityName);
+
+        // Send response
+        return C3po::respond($statusCode, $message, $data);
     }
 
     /**

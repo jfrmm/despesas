@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -20,7 +19,8 @@ class CreateDepositsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('movement_id')->references('id')->on('movements');
+            $table->foreign('movement_id')->references('id')->on('movements')
+                ->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('deposit_type_id')->references('id')->on('deposit_types');
         });
     }

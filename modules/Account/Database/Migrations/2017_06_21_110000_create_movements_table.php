@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -23,7 +22,8 @@ class CreateMovementsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('account_id')->references('id')->on('accounts');
+            $table->foreign('account_id')->references('id')->on('accounts')
+                ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

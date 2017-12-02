@@ -18,10 +18,12 @@ class C3po
      */
     public static function prepareMessage($file, $entity, $action, $module = null)
     {
-        if ($module) {
-            return trans(strtolower($module) . '::' . $file . '.' . $entity . '.' . $action);
+        $path = ($module) ? strtolower($module) . '::' . $file  : $file;
+
+        if ($entity) {
+            return trans($path . '.' . $entity . '.' . $action);
         } else {
-            return trans($file . '.' . $entity . '.' . $action);
+            return trans($path . '.' . $action);
         }
     }
 
