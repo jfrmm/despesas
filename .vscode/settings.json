@@ -1,4 +1,5 @@
 {
-    "phpcs.standard": "PSR2",
+    "php-cs-fixer.onsave": true,
+    "php-cs-fixer.rules": "@PSR2",
     "files.eol": "\n"
 }

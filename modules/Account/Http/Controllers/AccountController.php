@@ -1,151 +1,165 @@
 <?php
-
 namespace Modules\Account\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Nwidart\Modules\Facades\Module;
+use App\Helpers\Api\Http\C3po;
 
-use Modules\Account\Entities\Account;
+use Modules\Account\Repositories\AccountRepository as Account;
+use Modules\Account\Http\Requests\CreateRequest;
+use Modules\Account\Http\Requests\UpdateRequest;
+use Modules\Account\Http\Requests\DeleteRequest;
 
 class AccountController extends Controller
 {
     /**
-     * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @var object
      */
-    public function index()
-    {
-        $data = [
-            'accounts' => Account::all(),
-        ];
+    private $entity;
 
-        return response()->json($data);
+    /**
+     * The module in which the Controller is
+     *
+     * @var object
+     */
+    private $module;
+
+    /**
+     * The name of the entity we're refering to in the Controller
+     *
+     * @var string
+     */
+    private $entityName;
+
+    /**
+     * Constructor
+     *
+     * @param Account $account
+     */
+    public function __construct(Account $account)
+    {
+        $this->entity = $account;
+        $this->entityName = 'account';
+        $this->module = Module::find('Account');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @return Response
      */
-    public function create()
+    public function index(Request $request)
     {
-        $data = [
+        $result = $this->entity->getAll($request);
 
-        ];
+        $statusCode = 200;
+        $message    = C3po::prepareMessage('crud', $this->entityName, 'indexed', $this->module->getName());
+        $data       = C3po::prepareData($result, $this->entityName);
 
-        return view('account::accounts.create', $data);
+        return C3po::respond($statusCode, $message, $data);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @return Response
      */
-    public function store(Request $request)
+    public function store(CreateRequest $request)
     {
-        $this->validate($request, [
-            'name' => 'required|',
-            'iban' => 'required|size:25|unique:accounts,iban',
-        ]);
+        $result = $this->entity->createOrUpdate($request);
 
-        Account::create($request->all());
+        $statusCode = 201;
+        $message    = C3po::prepareMessage('crud', $this->entityName, 'created', $this->module->getName());
+        $data       = C3po::prepareData($result, $this->entityName);
 
-        return redirect('/accounts');
+        // Send response
+        return C3po::respond($statusCode, $message, $data);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Conta  $conta
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @param  int $id
+     * @return Response
      */
-    public function show(Account $account)
+    public function show(Request $request, $id)
     {
-        $data = [
-            'account' => $account,
-        ];
+        $result = $this->entity->getOne($request, $id);
 
-        return view('account::accounts.show', $data);
-    }
+        if (!$result) {
+            // Not found
+            $statusCode = 404;
+            $message    = C3po::prepareMessage('crud', $this->entityName, 'error.not_found', $this->module->getName());
+            $data       = null;
+        } else {
+            $statusCode = 200;
+            $message    = C3po::prepareMessage('crud', $this->entityName, 'read', $this->module->getName());
+            $data       = C3po::prepareData($result, $this->entityName);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Conta  $conta
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Account $account)
-    {
-        $data = [
-            'account' => $account,
-        ];
-
-        return view('account::accounts.edit', $data);
+        // Send response
+        return C3po::respond($statusCode, $message, $data);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Conta  $conta
-     * @return \Illuminate\Http\Response
+     * @param  UpdateRequest $request
+     * @param  int $id
+     * @return Response
      */
-    public function update(Request $request, Account $account)
+    public function update(UpdateRequest $request, $id)
     {
-        $this->validate($request, [
-            'name' => 'required|',
-            'iban' => 'required|size:25|unique:contas,iban,' . $account->id,
-        ]);
+        $result = $this->entity->getOne($request, $id);
 
-        $r = $account->update($request->all());
-
-        if($r == 0) {
-            $message = [
-                'type' => 'warning',
-                'text' => 'Falha na edição de ' . $account->name . '.',
-            ];
-
+        if (!$result) {
+            // Not found
+            $statusCode = 404;
+            $message    = C3po::prepareMessage('crud', $this->entityName, 'error.not_found', $this->module->getName());
+            $data       = null;
         } else {
-            $message = [
-                'type' => 'success',
-                'text' => 'Sucesso na edição de ' . $account->name  . '.',
-            ];
+            $result = $this->entity->createOrUpdate($request, $result);
 
+            $statusCode = 200;
+            $message    = C3po::prepareMessage('crud', $this->entityName, 'updated', $this->module->getName());
+            $data       = C3po::prepareData($result, $this->entityName);
         }
 
-        $data = [
-            'account' => $account,
-            'message' => $message,
-        ];
-
-        return view('account::accounts.show', $data);
-    }
-
-    /**
-     * Show the form for deleting a resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function delete(Account $account)
-    {
-        $data = [
-            'account' => $account,
-        ];
-
-        return view('account::accounts.delete', $data);
+        // Send response
+        return C3po::respond($statusCode, $message, $data);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Conta  $conta
-     * @return \Illuminate\Http\Response
+     * @param  DeleteRequest $request
+     * @param  int $id
+     * @return Response
      */
-    public function destroy(Account $account)
+    public function destroy(DeleteRequest $request, $id)
     {
-        //
-    }
+        $withTrashed = false; // for now we're not factoring in the trashed items
+        $hardDelete  = $withTrashed ? true : false;
+        $result      = $this->entity->getOne($request, $id);
+
+        if (!$result) {
+            // Not found
+            $statusCode = 404;
+            $message    = C3po::prepareMessage('crud', $this->entityName, 'error.not_found', $this->module->getName());
+        } else {
+            $deleted = $result;
+            $this->entity->deleteOne($request, $id);
+
+            $statusCode = 200;
+            $message    = C3po::prepareMessage('crud', $this->entityName, 'deleted', $this->module->getName());
+        }
+
+        // Send response
+        return C3po::respond($statusCode, $message);    }
 }

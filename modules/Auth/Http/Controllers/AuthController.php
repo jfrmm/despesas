@@ -1,5 +1,4 @@
 <?php
-
 namespace Modules\Auth\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -38,11 +37,11 @@ class AuthController extends Controller
         }
 
         $statusCode = 401;
-        $message    = trans('auth::messages.unauthorized');
+        $message = trans('auth::messages.unauthorized');
 
         return response()->json([
-            'status_code'   => $statusCode,
-            'message'       => $message,
+            'status_code' => $statusCode,
+            'message' => $message,
         ], $statusCode);
     }
 
@@ -66,11 +65,11 @@ class AuthController extends Controller
         $this->guard()->logout();
 
         $statusCode = 200;
-        $message    = trans('auth::messages.logout_successful');
+        $message = trans('auth::messages.logout_successful');
 
         return response()->json([
-            'status_code'   => $statusCode,
-            'message'       => $message,
+            'status_code' => $statusCode,
+            'message' => $message,
         ], $statusCode);
     }
 
@@ -94,14 +93,14 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         $statusCode = 201;
-        $message    = trans('auth::messages.token_generated');
+        $message = trans('auth::messages.token_generated');
 
         return response()->json([
-            'status_code'   => $statusCode,
-            'message'       => $message,
-            'access_token'  => $token,
-            'token_type'    => 'bearer',
-            'expires_in'    => $this->guard()->factory()->getTTL() * 60
+            'status_code' => $statusCode,
+            'message' => $message,
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => $this->guard()->factory()->getTTL() * 60
         ], $statusCode);
     }
 
