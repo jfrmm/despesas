@@ -3,9 +3,9 @@ namespace Modules\Account\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-use Modules\Account\Entities\Withdrawal;
 use Modules\Account\Entities\Deposit;
+use Modules\Account\Entities\Withdrawal;
+use Modules\User\Entities\User;
 
 class Movement extends Model
 {
@@ -16,6 +16,8 @@ class Movement extends Model
         'amount',
         'description',
         'account_id',
+        'creator_id',
+        'creditor_id',
     ];
 
     public static function boot()
@@ -30,5 +32,13 @@ class Movement extends Model
                 Deposit::create(['movement_id' => $model->id]);
             }
         });
+    }
+
+    /**
+     * The user that created the movement
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'creator_id');
     }
 }
