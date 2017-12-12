@@ -1,0 +1,615 @@
+{
+	"info": {
+		"name": "Despesas dev",
+		"_postman_id": "f9a6a8d9-526b-7603-8ab0-2ad77bf056d2",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"description": "",
+			"item": [
+				{
+					"name": "register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable('token', data.access_token);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "tony@app.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "password_confirmation",
+									"value": "password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/auth/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable('token', data.access_token);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "user@app.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/auth/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "bearer  {{token}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{url}}/auth/logout",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "refresh",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable('token', data.access_token);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "bearer  {{token}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{url}}/auth/refresh",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"refresh"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "me",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "bearer  {{token}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{url}}/auth/me",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"me"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Account",
+			"description": "",
+			"item": [
+				{
+					"name": "accounts",
+					"description": "",
+					"item": [
+						{
+							"name": "accounts index",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "bearer {{token}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "{{url}}/accounts",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"accounts"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "accounts store",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "bearer {{token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Tony",
+											"type": "text"
+										},
+										{
+											"key": "iban",
+											"value": "PT00509722436959428898369",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/accounts",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"accounts"
+									]
+								},
+								"description": null
+							},
+							"response": []
+						},
+						{
+							"name": "accounts show",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "bearer {{token}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "{{url}}/accounts/2",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"accounts",
+										"2"
+									]
+								},
+								"description": null
+							},
+							"response": []
+						},
+						{
+							"name": "accounts update",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "bearer {{token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Tony",
+											"type": "text"
+										},
+										{
+											"key": "iban",
+											"value": "PT00509722436959428898369",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/accounts/6",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"accounts",
+										"6"
+									]
+								},
+								"description": null
+							},
+							"response": []
+						},
+						{
+							"name": "accounts destroy",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "bearer {{token}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "{{url}}/accounts/6",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"accounts",
+										"6"
+									]
+								},
+								"description": null
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "movements",
+					"description": "",
+					"item": [
+						{
+							"name": "movements index",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "bearer {{token}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "{{url}}/movements",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"movements"
+									]
+								},
+								"description": null
+							},
+							"response": []
+						},
+						{
+							"name": "movements store",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "bearer {{token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "account_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "date",
+											"value": "2017-01-01",
+											"type": "text"
+										},
+										{
+											"key": "amount",
+											"value": "50",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "test",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/movements",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"movements"
+									]
+								},
+								"description": null
+							},
+							"response": []
+						},
+						{
+							"name": "movements show",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "bearer {{token}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "{{url}}/movements/30",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"movements",
+										"30"
+									]
+								},
+								"description": null
+							},
+							"response": []
+						},
+						{
+							"name": "movements update",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "bearer {{token}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "description",
+											"value": "another test",
+											"type": "text"
+										},
+										{
+											"key": "date",
+											"value": "2017-12-01",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/movements/30",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"movements",
+										"30"
+									]
+								},
+								"description": null
+							},
+							"response": []
+						},
+						{
+							"name": "movements destroy",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "bearer {{token}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "{{url}}/movements/30",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"movements",
+										"30"
+									]
+								},
+								"description": null
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		}
+	]
+}
