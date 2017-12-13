@@ -1,60 +1,63 @@
 <?php
 namespace Modules\Account\Http\Controllers;
 
+use App\Helpers\Http\Api\C3po;
+use App\Helpers\Http\Controllers\ModuleController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Controller;
-use Nwidart\Modules\Facades\Module;
-use App\Helpers\Api\Http\C3po;
-
-use Modules\Account\Repositories\Account\AccountRepository as Account;
+use Modules\Account\Filters\AccountSort;
 use Modules\Account\Http\Requests\Account\CreateRequest;
-use Modules\Account\Http\Requests\Account\UpdateRequest;
 use Modules\Account\Http\Requests\Account\DeleteRequest;
+use Modules\Account\Http\Requests\Account\UpdateRequest;
+use Modules\Account\Repositories\AccountRepository as Account;
+use Nwidart\Modules\Facades\Module;
 
-class AccountController extends Controller
+/**
+ * The accounts
+ */
+class AccountController extends ModuleController
 {
-    /**
-     *
-     * @var object
-     */
-    private $entity;
-
-    /**
-     * The name of the entity we're refering to in the Controller
-     *
-     * @var string
-     */
-    private $entityName;
-
-    /**
-     * The module in which the Controller is
-     *
-     * @var object
-     */
-    private $module;
-
     /**
      * Constructor
      *
-     * @param Account $account
+     * @param Account $entity
      */
-    public function __construct(Account $account)
+    public function __construct(Account $entity)
     {
-        $this->entity = $account;
-        $this->entityName = 'account';
-        $this->module = Module::find('Account');
+        // we need to identify this Module we're in
+        parent::__construct('account', $entity, 'account');
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @param  Request $request
+     * string ::: [field_name]     ::: Field name to be sorted in ASC or DESC
+     *
+     * array ::: columns           ::: The fields to be shown
+     *
+     * string ::: search           ::: A keyword to be used in search
+     *
+     * array ::: with              ::: The relationships that should be retrieved
+     *
+     * int ::: page                ::: The page number
+     *
+     * int ::: size                ::: The number of items in each page
+     *
+     * @request
+     * @param string    [field_name]    Field name to be sorted in ASC or DESC
+     * @param array     columns         The fields to be shown
+     * @param string    search          A keyword to be used in search
+     * @param array     with            The relationships that should be retrieved
+     * @param int       page            The page number
+     * @param int       size            The number of items in each page
+     *
+     * @function
+     * @param  AccountSort $sort
      * @return Response
      */
-    public function index(Request $request)
+    public function index(AccountSort $sort)
     {
-        $result = $this->entity->getAll($request);
+        $result = $this->entity->getAll($sort);
 
         $statusCode = 200;
         $message = C3po::prepareMessage('crud', $this->entityName, 'indexed', $this->module->getName());

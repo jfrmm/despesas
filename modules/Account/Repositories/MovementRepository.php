@@ -1,10 +1,10 @@
 <?php
-namespace Modules\Account\Repositories\Movement;
+namespace Modules\Account\Repositories;
 
-use Illuminate\Http\Request;
 use App\Helpers\BaseRepository\Eloquent\BaseRepository;
-
+use Illuminate\Http\Request;
 use Modules\Account\Entities\Movement;
+use Modules\Account\Filters\MovementSort;
 
 class MovementRepository extends BaseRepository
 {
@@ -21,13 +21,13 @@ class MovementRepository extends BaseRepository
     /**
      * Get all the items
      *
-     * @param Request $request
+     * @param MovementSort $sort
      *
      * @return Movement
      */
-    public function getAll(Request $request)
+    public function getAll(MovementSort $sort)
     {
-        return $this->all($request);
+        return $this->all($sort);
     }
 
     /**

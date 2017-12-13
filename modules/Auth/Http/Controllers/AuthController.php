@@ -7,7 +7,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use JWTAuth;
 use Nwidart\Modules\Facades\Module;
-use App\Helpers\Api\Http\C3po;
+use App\Helpers\Http\Api\C3po;
 
 use Modules\User\Repositories\UserRepository as User;
 use Modules\Auth\Http\Requests\RegisterRequest;

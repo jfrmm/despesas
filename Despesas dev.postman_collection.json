@@ -16,10 +16,11 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "c77984e7-1e9e-408a-9217-35d0f2879dd8",
 								"type": "text/javascript",
 								"exec": [
-									"var data = JSON.parse(responseBody);",
-									"postman.setEnvironmentVariable('token', data.access_token);"
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable('tokenUser', jsonData.access_token);"
 								]
 							}
 						}
@@ -76,10 +77,11 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "47766094-435b-4ca4-8be2-1c3b8207f317",
 								"type": "text/javascript",
 								"exec": [
-									"var data = JSON.parse(responseBody);",
-									"postman.setEnvironmentVariable('token', data.access_token);"
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable('tokenUser', jsonData.access_token);"
 								]
 							}
 						}
@@ -160,10 +162,11 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "d69d77de-49a9-4e4c-a575-b5538a247ca7",
 								"type": "text/javascript",
 								"exec": [
-									"var data = JSON.parse(responseBody);",
-									"postman.setEnvironmentVariable('token', data.access_token);"
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable('tokenUser', jsonData.access_token);"
 								]
 							}
 						}
@@ -250,12 +253,12 @@
 								],
 								"body": {},
 								"url": {
-									"raw": "{{url}}/accounts",
+									"raw": "{{url}}/{{entityOne}}",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
-										"accounts"
+										"{{entityOne}}"
 									]
 								},
 								"description": ""
@@ -264,6 +267,20 @@
 						},
 						{
 							"name": "accounts store",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a9cb225d-b261-4f25-b1ef-0cee7d8a8621",
+										"type": "text/javascript",
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"var entity = pm.environment.get('entityOneName');",
+											"postman.setEnvironmentVariable('entityOneId', jsonData.data[entity].id);"
+										]
+									}
+								}
+							],
 							"request": {
 								"method": "POST",
 								"header": [
@@ -290,18 +307,18 @@
 										},
 										{
 											"key": "iban",
-											"value": "PT00509722436959428898369",
+											"value": "PT00509722436959428898366",
 											"type": "text"
 										}
 									]
 								},
 								"url": {
-									"raw": "{{url}}/accounts",
+									"raw": "{{url}}/{{entityOne}}",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
-										"accounts"
+										"{{entityOne}}"
 									]
 								},
 								"description": null
@@ -324,13 +341,13 @@
 								],
 								"body": {},
 								"url": {
-									"raw": "{{url}}/accounts/2",
+									"raw": "{{url}}/{{entityOne}}/{{entityOneId}}",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
-										"accounts",
-										"2"
+										"{{entityOne}}",
+										"{{entityOneId}}"
 									]
 								},
 								"description": null
@@ -372,13 +389,13 @@
 									]
 								},
 								"url": {
-									"raw": "{{url}}/accounts/6",
+									"raw": "{{url}}/{{entityOne}}/{{entityOneId}}",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
-										"accounts",
-										"6"
+										"{{entityOne}}",
+										"{{entityOneId}}"
 									]
 								},
 								"description": null
@@ -401,18 +418,41 @@
 								],
 								"body": {},
 								"url": {
-									"raw": "{{url}}/accounts/6",
+									"raw": "{{url}}/{{entityOne}}/{{entityOneId}}",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
-										"accounts",
-										"6"
+										"{{entityOne}}",
+										"{{entityOneId}}"
 									]
 								},
 								"description": null
 							},
 							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "7540682b-c39b-4749-9a0f-3bdf2e62ea70",
+								"type": "text/javascript",
+								"exec": [
+									"pm.environment.set('entityOne', 'accounts');",
+									"pm.environment.set('entityOneName', 'account');"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "3a6ec46f-4cb1-4a07-8144-ce438e8e6ff1",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
 						}
 					],
 					"_postman_isSubFolder": true
@@ -437,12 +477,12 @@
 								],
 								"body": {},
 								"url": {
-									"raw": "{{url}}/movements",
+									"raw": "{{url}}/{{entityOne}}",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
-										"movements"
+										"{{entityOne}}"
 									]
 								},
 								"description": null
@@ -451,6 +491,20 @@
 						},
 						{
 							"name": "movements store",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "8af77cd1-9f12-4e70-8a12-5b0880f9aad7",
+										"type": "text/javascript",
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"var entity = pm.environment.get('entityOneName');",
+											"postman.setEnvironmentVariable('entityOneId', jsonData.data[entity].id);"
+										]
+									}
+								}
+							],
 							"request": {
 								"method": "POST",
 								"header": [
@@ -489,16 +543,22 @@
 											"key": "description",
 											"value": "test",
 											"type": "text"
+										},
+										{
+											"key": "creator_id",
+											"value": "1",
+											"description": "",
+											"type": "text"
 										}
 									]
 								},
 								"url": {
-									"raw": "{{url}}/movements",
+									"raw": "{{url}}/{{entityOne}}",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
-										"movements"
+										"{{entityOne}}"
 									]
 								},
 								"description": null
@@ -521,13 +581,13 @@
 								],
 								"body": {},
 								"url": {
-									"raw": "{{url}}/movements/30",
+									"raw": "{{url}}/{{entityOne}}/{{entityOneId}}",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
-										"movements",
-										"30"
+										"{{entityOne}}",
+										"{{entityOneId}}"
 									]
 								},
 								"description": null
@@ -564,13 +624,13 @@
 									]
 								},
 								"url": {
-									"raw": "{{url}}/movements/30",
+									"raw": "{{url}}/{{entityOne}}/{{entityOneId}}",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
-										"movements",
-										"30"
+										"{{entityOne}}",
+										"{{entityOneId}}"
 									]
 								},
 								"description": null
@@ -593,13 +653,13 @@
 								],
 								"body": {},
 								"url": {
-									"raw": "{{url}}/movements/30",
+									"raw": "{{url}}/{{entityOne}}/{{entityOneId}}",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
-										"movements",
-										"30"
+										"{{entityOne}}",
+										"{{entityOneId}}"
 									]
 								},
 								"description": null
@@ -607,9 +667,126 @@
 							"response": []
 						}
 					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "f74e03d9-3e5f-4775-93ce-902c5e5f6585",
+								"type": "text/javascript",
+								"exec": [
+									"pm.environment.set('entityOne', 'movements');",
+									"pm.environment.set('entityOneName', 'movement');"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "b538da15-a9e5-474d-aa4c-c710a43f3455",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "creditors/movements",
+					"description": "",
+					"item": [
+						{
+							"name": "creditors/movements index",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "bearer {{token}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "{{url}}/{{entityOne}}/1/{{entityTwo}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"{{entityOne}}",
+										"1",
+										"{{entityTwo}}"
+									]
+								},
+								"description": null
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "f74e03d9-3e5f-4775-93ce-902c5e5f6585",
+								"type": "text/javascript",
+								"exec": [
+									"pm.environment.set('entityOne', 'creditors');",
+									"pm.environment.set('entityOneName', 'creditor');",
+									"pm.environment.set('entityTwo', 'movements');",
+									"pm.environment.set('entityTwoName', 'movement');"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "b538da15-a9e5-474d-aa4c-c710a43f3455",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
 					"_postman_isSubFolder": true
 				}
 			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{tokenUser}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "5fd66848-0223-457b-881f-c6866fdefe5c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "2ec0d241-7648-44ac-a7a7-e5ebda1e6779",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }

@@ -1,10 +1,10 @@
 <?php
-namespace Modules\Account\Repositories\Account;
+namespace Modules\Account\Repositories;
 
-use Illuminate\Http\Request;
 use App\Helpers\BaseRepository\Eloquent\BaseRepository;
-
+use Illuminate\Http\Request;
 use Modules\Account\Entities\Account;
+use Modules\Account\Filters\AccountSort;
 
 class AccountRepository extends BaseRepository
 {
@@ -21,13 +21,13 @@ class AccountRepository extends BaseRepository
     /**
      * Get all the items
      *
-     * @param Request $request
+     * @param AccountSort $sort
      *
      * @return Account
      */
-    public function getAll(Request $request)
+    public function getAll(AccountSort $sort)
     {
-        return $this->all($request);
+        return $this->all($sort);
     }
 
     /**
