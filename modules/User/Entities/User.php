@@ -6,6 +6,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Modules\Account\Entities\Account;
+
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
@@ -49,5 +51,10 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function accounts()
+    {
+        return $this->belongsToMany(Account::class);
     }
 }

@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Modules\Account\Entities\Movement;
+use Modules\User\Entities\User;
 
 class Account extends Model
 {
@@ -18,5 +19,10 @@ class Account extends Model
     public function movements()
     {
         return $this->hasMany(Movement::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
     }
 }
