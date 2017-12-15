@@ -1,11 +1,10 @@
 <?php
 namespace App\Helpers\BaseRepository\Eloquent;
 
-use Illuminate\Container\Container as App;
-use Illuminate\Database\Eloquent\Model;
-
 use App\Helpers\BaseRepository\Contracts\BaseRepositoryInterface;
 use App\Helpers\BaseRepository\Exceptions\BaseRepositoryException;
+use Illuminate\Container\Container as App;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * This class serves as a basic way to associate a repository to a model.
@@ -63,82 +62,62 @@ abstract class BaseRepository implements BaseRepositoryInterface
     /**
      * List all items
      *
-     * @param Request $request
-     *
-     * @return Model
-     */
-    public function all($request, $columns = ['*'])
-    {
-        // get select columns
-        $columns = ($columns == ['*']) ? $request->input('columns') : $columns;
-        $columns = (empty($columns) or !is_array($columns)) ? [$this->model->getTable() . '.*'] : $columns;
-
-        $items = $this->model
-            // select columns
-            ->select(array_merge([$this->model->getKeyName()], $columns));
-
-        return $items;
-    }
-
-    /**
-     * List all items
-     *
      * @param QuerySort $sort
      * @param array $columns
      * @param array $eagerLoad
      *
      * @return Model
      */
-    // public function all($sort, $columns = ['*'], $eagerLoad = [])
-    // {
-    //     // get the request associated with the sort
-    //     $request = $sort->request();
+    public function all($sort, $columns = ['*'], $eagerLoad = [])
+    {
+        // get the request associated with the sort
+        $request = $sort->request();
 
-    //     // get model's searchable items
-    //     $searchable = $this->model->getSearchable();
+        // get model's searchable items
+        $searchable = $this->model->getSearchable();
 
-    //     // get search term
-    //     $search = $request->input('search');
+        // get search term
+        $search = $request->input('search');
 
-    //     // get select columns
-    //     $columns = ($columns == ['*']) ? $request->input('columns') : $columns;
-    //     $columns = (empty($columns) or !is_array($columns)) ? [$this->model->getTable() . '.*'] : $columns;
+        // get select columns
+        $columns = ($columns == ['*']) ? $request->input('columns') : $columns;
+        $columns = (empty($columns) or !is_array($columns)) ? [$this->model->getTable() . '.*'] : $columns;
 
-    //     // get eager loading relationships
-    //     $eagerLoad = ($eagerLoad == []) ? $request->input('with') : $eagerLoad;
-    //     $eagerLoad = (empty($eagerLoad) or !is_array($eagerLoad)) ? null : $eagerLoad;
+        // get eager loading relationships
+        $eagerLoad = ($eagerLoad == []) ? $request->input('with') : $eagerLoad;
+        $eagerLoad = (empty($eagerLoad) or !is_array($eagerLoad)) ? null : $eagerLoad;
 
-    //     // get page parameter
-    //     $page = $request->input('page');
+        // get page parameter
+        $page = $request->input('page');
 
-    //     // get items
-    //     $items = $this->model
-    //         // search by searchable fields
-    //         ->when($search, function ($query) use ($search, $searchable) {
-    //         if ($searchable) {
-    //             $query->where(function ($query) use ($search, $searchable) {
-    //                 foreach ($searchable as $s) {
-    //                     $query->orWhere($s, 'LIKE', '%' . $search . '%');
-    //                 }
-    //             });
-    //         }
-    //     })
-    //         // sort columns
-    //         ->sort($sort)
-    //         // select columns
-    //         ->select(array_merge([$this->model->getKeyName()], $columns))
-    //         // set eager loading relationships
-    //         ->when($eagerLoad, function ($query) use ($eagerLoad) {
-    //         $query->with($eagerLoad);
-    //     })
-    //         // paginate
-    //         ->when($page, function ($query) use ($search, $request) {
-    //         $size = ($request->has('size')) ? $request->size : config('gdpr.pagination_size');
-    //         return $query->paginate($size);
-    //     });
+        // get items
+        $items = $this->model
+        // search by searchable fields
+            ->when($search, function ($query) use ($search, $searchable) {
+                if ($searchable) {
+                    $query->where(function ($query) use ($search, $searchable) {
+                        foreach ($searchable as $s) {
+                            $query->orWhere($s, 'LIKE', '%' . $search . '%');
+                        }
+                    });
+                }
+            })
+        // sort columns
+            ->sort($sort)
+        // select columns
+            ->select(array_merge([$this->model->getKeyName()], $columns))
+        // set eager loading relationships
+            ->when($eagerLoad, function ($query) use ($eagerLoad) {
+                $query->with($eagerLoad);
+            })
+        // paginate
+            ->when($page, function ($query) use ($search, $request) {
+                $size = ($request->has('size')) ? $request->size : config('gdpr.pagination_size');
+                return $query->paginate($size);
+            });
 
-    //     return $items;
-    // }
+        return $items;
+    }
 
     /**
      * List an item's relationship.
@@ -173,27 +152,27 @@ abstract class BaseRepository implements BaseRepositoryInterface
         $items = $this->model
             ->find($id, array_merge([$this->model->getKeyName()]))
             ->{$eagerLoad[0]}()
-            // search by searchable fields
+        // search by searchable fields
             ->when($search, function ($query) use ($search, $searchable) {
-            if ($searchable) {
-                $query->where(function ($query) use ($search, $searchable) {
-                    foreach ($searchable as $s) {
-                        $query->orWhere($s, 'LIKE', '%' . $search . '%');
-                    }
-                });
-            }
-        })
-            // sort columns
+                if ($searchable) {
+                    $query->where(function ($query) use ($search, $searchable) {
+                        foreach ($searchable as $s) {
+                            $query->orWhere($s, 'LIKE', '%' . $search . '%');
+                        }
+                    });
+                }
+            })
+        // sort columns
             ->sort($sort)
-            // select columns
+        // select columns
             ->when($columns, function ($query) use ($columns) {
-            $query->select(array_merge([$this->model->getKeyName()], $columns));
-        })
-            // paginate
+                $query->select(array_merge([$this->model->getKeyName()], $columns));
+            })
+        // paginate
             ->when($page, function ($query) use ($search, $request) {
-            $size = ($request->has('size')) ? $request->size : config('gdpr.pagination_size');
-            return $query->paginate($size);
-        });
+                $size = ($request->has('size')) ? $request->size : config('gdpr.pagination_size');
+                return $query->paginate($size);
+            });
 
         return $items;
     }
@@ -207,7 +186,13 @@ abstract class BaseRepository implements BaseRepositoryInterface
      */
     public function create($request)
     {
-        return $this->model->create($request->all());
+        $item = $this->model->create($request->all());
+
+        if ($item) {
+            $item = $this->find($request, $item->id);
+        }
+
+        return $item;
     }
 
     /**
@@ -233,11 +218,11 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
         // get item
         $item = $this->model
-            // set eager loading relationships
+        // set eager loading relationships
             ->when($eagerLoad, function ($query) use ($eagerLoad) {
                 $query->with($eagerLoad);
             })
-            // get trashed elements also
+        // get trashed elements also
             ->when($withTrashed, function ($query) {
                 $query->withTrashed();
             })
@@ -261,8 +246,8 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
         $item = $this->model
             ->when($fieldValue, function ($query) use ($field, $fieldValue) {
-            $query->where($field, $fieldValue);
-        })
+                $query->where($field, $fieldValue);
+            })
             ->first();
 
         return $item;
@@ -299,8 +284,8 @@ abstract class BaseRepository implements BaseRepositoryInterface
         $item->touch();
 
         $item = $item
-            // set eager loading relationships
-            ->when($eagerLoad, function ($query) use ($eagerLoad) {
+        // set eager loading relationships
+        ->when($eagerLoad, function ($query) use ($eagerLoad) {
             $query->with($eagerLoad);
         })
             ->find($id, array_merge([$this->model->getKeyName()], $columns));

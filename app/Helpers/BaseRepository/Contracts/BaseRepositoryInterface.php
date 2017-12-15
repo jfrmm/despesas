@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helpers\BaseRepository\Contracts;
 
 /**
@@ -6,8 +7,7 @@ namespace App\Helpers\BaseRepository\Contracts;
  */
 interface BaseRepositoryInterface
 {
-    public function all($request);
-    // public function all($filter, $columns = ['*'], $eagerLoad = []);
+    public function all($filter, $columns = ['*'], $eagerLoad = []);
 
     public function create($request);
 

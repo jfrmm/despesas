@@ -1,5 +1,5 @@
 <?php
-namespace App\Helpers\Api\Http;
+namespace App\Helpers\Http\Api;
 
 /**
  * This class helps in formatting and translating data to a JSON response
@@ -18,7 +18,7 @@ class C3po
      */
     public static function prepareMessage($file, $entity, $action, $module = null)
     {
-        $path = ($module) ? strtolower($module) . '::' . $file  : $file;
+        $path = ($module) ? strtolower($module) . '::' . $file : $file;
 
         if ($entity) {
             return trans($path . '.' . $entity . '.' . $action);
@@ -63,7 +63,7 @@ class C3po
 
             return [
                 'metadata' => [
-                    'pagination' => $objectData
+                    'pagination' => $objectData,
                 ],
                 'data' => $data,
             ];
@@ -83,7 +83,7 @@ class C3po
                 $data = [
                     'data' => [
                         $objectName => $objectData,
-                    ]
+                    ],
                 ];
             }
 
