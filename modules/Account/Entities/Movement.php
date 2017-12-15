@@ -53,7 +53,15 @@ class Movement extends Model
     }
 
     /**
-     * The user that created the movement
+     * A movement belongs to one account
+     */
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
+    }
+
+    /**
+     * The movement's creator
      */
     public function creator()
     {
@@ -61,7 +69,7 @@ class Movement extends Model
     }
 
     /**
-     * The user which is a creditor of the movement
+     * The movement's creditor
      */
     public function creditor()
     {

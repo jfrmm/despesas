@@ -13,9 +13,9 @@ class AddUserToAccounts extends Migration
     public function up()
     {
         Schema::table('accounts', function (Blueprint $table) {
-            $table->unsignedInteger('user_id')->nullable()->after('iban');
+            $table->unsignedInteger('owner_id')->after('iban');
 
-            $table->foreign('user_id')->references('id')->on('users')
+            $table->foreign('owner_id')->references('id')->on('users')
             ->onUpdate('cascade');
         });
     }
@@ -28,7 +28,7 @@ class AddUserToAccounts extends Migration
     public function down()
     {
         Schema::table('accounts', function (Blueprint $table) {
-            $table->dropColumn('user_id');
+            $table->dropColumn('owner_id');
         });
     }
 }

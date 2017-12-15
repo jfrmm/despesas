@@ -33,13 +33,27 @@ class Account extends Model
         'name',
     ];
 
-    public function movements()
+    /**
+     * An account has an owner
+     */
+    public function owner()
     {
-        return $this->hasMany(Movement::class);
+        return $this->hasOne(User::class, 'owner_id');
     }
 
+    /**
+     * An account belongs to many users
+     */
     public function users()
     {
         return $this->belongsToMany(User::class);
+    }
+
+    /**
+     * An account has many movements
+     */
+    public function movements()
+    {
+        return $this->hasMany(Movement::class);
     }
 }

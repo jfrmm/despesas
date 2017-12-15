@@ -53,6 +53,9 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    /**
+     * A user belongs to many accounts
+     */
     public function accounts()
     {
         return $this->belongsToMany(Account::class);

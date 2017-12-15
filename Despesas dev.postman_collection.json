@@ -547,7 +547,6 @@
 										{
 											"key": "creator_id",
 											"value": "1",
-											"description": "",
 											"type": "text"
 										}
 									]
@@ -754,39 +753,39 @@
 					],
 					"_postman_isSubFolder": true
 				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{tokenUser}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0af7fe80-556d-464b-bbef-7e26e6db068b",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "7a74894e-639f-4e87-8f6f-b5ae737b83d0",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
 			]
-		}
-	],
-	"auth": {
-		"type": "bearer",
-		"bearer": [
-			{
-				"key": "token",
-				"value": "{{tokenUser}}",
-				"type": "string"
-			}
-		]
-	},
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"id": "5fd66848-0223-457b-881f-c6866fdefe5c",
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"id": "2ec0d241-7648-44ac-a7a7-e5ebda1e6779",
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
 		}
 	]
 }
