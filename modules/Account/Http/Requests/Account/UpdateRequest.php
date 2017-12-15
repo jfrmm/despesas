@@ -2,6 +2,7 @@
 namespace Modules\Account\Http\Requests\Account;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateRequest extends FormRequest
 {
@@ -25,6 +26,12 @@ class UpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $user = Auth::user();
+
+        if ($user = $this->owner_id) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

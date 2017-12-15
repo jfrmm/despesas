@@ -5,6 +5,7 @@ use App\Helpers\Http\Api\C3po;
 use App\Helpers\Http\Controllers\ModuleController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Modules\Account\Filters\MovementSort;
 use Modules\Account\Http\Requests\Movement\CreateRequest;
 use Modules\Account\Http\Requests\Movement\DeleteRequest;
@@ -74,6 +75,8 @@ class MovementController extends ModuleController
      */
     public function store(CreateRequest $request)
     {
+        $request->request->add(['creator_id' => Auth::user()->id]);
+
         $result = $this->entity->createOrUpdate($request);
 
         $statusCode = 201;

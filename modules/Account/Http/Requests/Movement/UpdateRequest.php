@@ -13,10 +13,11 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'date'          => 'date',
-            'amount'        => 'numeric',
-            'description'   => 'min:3|max:191',
-            'account_id'    => 'integer',
+            'date' => 'date',
+            'amount' => 'numeric',
+            'description' => 'min:3|max:191',
+            'account_id' => 'integer',
+            'creditor_id' => 'integer|exists:users,id',
         ];
     }
 

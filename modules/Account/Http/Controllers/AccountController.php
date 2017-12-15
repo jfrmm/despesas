@@ -11,6 +11,7 @@ use Modules\Account\Http\Requests\Account\DeleteRequest;
 use Modules\Account\Http\Requests\Account\UpdateRequest;
 use Modules\Account\Repositories\AccountRepository as Account;
 use Nwidart\Modules\Facades\Module;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * The accounts
@@ -74,6 +75,8 @@ class AccountController extends ModuleController
      */
     public function store(CreateRequest $request)
     {
+        $request->request->add(['owner_id' => Auth::user()->id]);
+
         $result = $this->entity->createOrUpdate($request);
 
         $statusCode = 201;

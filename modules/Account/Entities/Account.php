@@ -22,6 +22,7 @@ class Account extends Model
     protected $fillable = [
         'name',
         'iban',
+        'owner_id',
     ];
 
     /**
@@ -31,6 +32,7 @@ class Account extends Model
      */
     protected $searchable = [
         'name',
+        'iban',
     ];
 
     /**

@@ -13,10 +13,11 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'date'          => 'required|date',
-            'amount'        => 'required|numeric',
-            'description'   => 'string|min:3|max:191',
-            'account_id'    => 'required|integer',
+            'date' => 'required|date',
+            'amount' => 'required|numeric',
+            'description' => 'string|min:3|max:191',
+            'account_id' => 'required|integer',
+            'creditor_id' => 'integer',
         ];
     }
 
