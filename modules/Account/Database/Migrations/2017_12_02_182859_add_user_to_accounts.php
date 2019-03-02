@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -28,6 +29,7 @@ class AddUserToAccounts extends Migration
     public function down()
     {
         Schema::table('accounts', function (Blueprint $table) {
+            $table->dropForeign('accounts_owner_id_foreign');
             $table->dropColumn('owner_id');
         });
     }
