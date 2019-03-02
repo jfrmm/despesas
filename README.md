@@ -32,39 +32,52 @@ Build and populate the database with some test data, just run
 php artisan migrate --seed
 ```
 
-## Troubleshooting
+# Troubleshooting
 
-### App responses are very slow
-If you are running Windows and are using Homestead, [enabling NFS support](http://iteration9.com/2015/using-laravel-homestead-on-windows/) may help
+## App responses are very slow
+If you are running Windows and are using Homestead, [enabling NFS support](http://backendtime.com/setup-laravel-homestead-windows/#speeding-up) may help. The instructions below were tested with VirtualBox 5.2.22, Vagrant 2.2.2 and laravel/homestead v7.18.0
 
-Add this line to your folders mapping in `c:\path\to\Homestead\Homestead.yaml`:
+
+Add these lines to your `folders` mapping in `c:\path\to\Homestead\Homestead.yaml`:
 ```
 type: "nfs"
+mount_options: ['nolock,vers=3,udp,noatime']
 ```
 
-Then install this two plugins in your box
+Then install this plugin in your box
 ```
-vagrant plugin install vagrant-vbguest
 vagrant plugin install vagrant-winnfsd
-vagrant plugin install vagrant-bindfs
 ```
 
-Finnaly, in `c:\path\to\Homestead\scripts\homestead.rb` add this to the end of the `def Homestead.configure` block:
+If your box was already up, you should restart and provision it (it will destroy your databases!)
 ```
-# Sort folders to keep vagrant-winnfsd happy
-settings["folders"].sort! { |a,b| a["map"].length <=> b["map"].length }
-
-# Add synced folders using NFS
-settings["folders"].each do |folder|
-    config.vm.synced_folder folder["map"], folder["to"],
-    id: folder["map"],
-    :nfs => true,
-    :mount_options => ['nolock,vers=3,udp,noatime']
-end
+vagrant reload --provision
 ```
 
-If your box was already up, you should first destroy it (beware of your DB data!)
+## Can't debug with Homestead
+Make sure you have Xdebug on Homestead correctly configured. Enter your box via SSH
 ```
-vagrant destroy
-vagrant up --provision
+vagrant ssh
 ```
+
+then open your `20-xdebug.ini` file (in this scenario, we're using PHP 7.2)
+```
+sudo vim /etc/php/7.2/fpm/conf.d/20-xdebug.ini
+```
+
+check if it matches this configuration
+```
+zend_extension=xdebug.so
+xdebug.remote_enable = 1
+xdebug.remote_autostart = 1
+xdebug.remote_connect_back = 1
+xdebug.remote_port = 9000
+xdebug.max_nesting_level = 512
+```
+
+and finally, restart the service
+```
+sudo service php7.2-fpm restart
+```
+
+Also, remember to check your firewall (eg.: connection is of type "Private" on Windows)
